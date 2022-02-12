@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>ATM</title>
+  </head>
+  <body>
+    <section>
+      <div id="app">
+        <h3>入力画面</h3>
+        <input type="number" v-model="nyuryokugaku" />
+        <div>
+          <div>入力額： {{nyuryokugaku}} 円</div>
+          <button v-on:click="nyukin">入力</button>
+          <button v-on:click="syukin">出力</button>
+        </div>
+        <h3>口座残高</h3>
+        <div>残高：{{zandaka}}円</div>
+        <h3>取引記録</h3>
+        <div v-for="nakami in torihiki">
+          <div>日付：{{ nakami.date }}</div>
+          <div>操作：{{ nakami.type}}</div>
+          <div>金額：{{ nakami.money }}</div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://unpkg.com/vue@3.2.20"></script>
+    <script>
+      Vue.createApp({
+        data() {
+          return {
+            nyuryokugaku: "",
+            zandaka: 0,
+            torihiki: []
+          };
+        },
+        methods: {
+          nyukin: function () {
+            // inputで入力される値はString型なので、Number() でNumber型に変換しないといけない。
+            this.zandaka += Number(this.nyuryokugaku);
+            const nakamis = {
+              date: new Date(),
+              type: "入金",
+              money: this.nyuryokugaku
+            };
+            this.torihiki.push(nakamis);
+          },
+          syukin: function () {
+            // inputで入力される値はString型なので、Number() でNumber型に変換しないといけない。
+            this.zandaka -= Number(this.nyuryokugaku);
+            const nakamis = {
+              date: new Date(),
+              type: "出金",
+              money: this.nyuryokugaku
+            };
+            this.torihiki.push(nakamis);
+          }
+        }
+      }).mount("#app");
+    </script>
+  </body>
+</html>
